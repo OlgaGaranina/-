@@ -1,0 +1,90 @@
+Τΰιλ HeadStruct.h:
+#pragma once
+#include <fstream>
+#include <string>
+using namespace std;
+struct time
+{
+int h;
+int m;
+std::string str();
+};
+struct poster
+{
+char name[30];
+int num;
+int quant;
+int cost;
+struct time time;
+bool write(ofstream* fout);
+bool read(ifstream* fin);
+};
+
+
+
+
+Τΰιλ RealizeStruct.cpp:
+#include "HeadStruct.h"
+using namespace std;
+void intInStr(string* str, int num)
+{
+string temp = "";
+while (num > 0)
+{
+temp += char(48 + num % 10);
+num /= 10;
+}
+int i;
+for (i = 0; temp[i] != '\0'; i++);
+i--;
+while (i >= 0)
+{
+*str += temp[i];
+i--;
+}
+}
+string time::str()
+{
+string str;
+if (h < 10)
+{
+str += "0";
+intInStr(&str, h);
+}
+else
+{
+intInStr(&str, h);
+}
+str += ":";
+if (m < 10)
+{
+str += "0";
+intInStr(&str, m);
+}
+else
+{
+intInStr(&str, m);
+}
+return str;
+}
+bool poster::write(ofstream* fout)
+{
+if (!fout)
+return false;
+fout->write((char*)this, sizeof(poster));
+if (fout->good())
+return true;
+return false;
+}
+bool poster::read(ifstream* fin)
+{
+if (!fin)
+return false;
+if (fin->peek() == EOF)
+return false;
+fin->read((char*)this, sizeof(poster));
+if (fin->good())
+return true;
+return false;
+}
+
